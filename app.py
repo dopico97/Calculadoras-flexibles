@@ -152,12 +152,17 @@ with tab1:
   st.markdown("### Desglose Anual")
   st.dataframe(df_resumen, use_container_width=True)
 
-  # Bloque de Afiliación con diseño destacado
+# Bloque de Afiliación con botón interactivo real
   st.markdown("---")
-  st.success(
-      f"🚀 **¿Listo para empezar en {broker_info['nombre_corto']}?**\n\n"
-      f"Abre tu cuenta en pocos minutos de forma totalmente online y empieza a rentabilizar tu liquidez sin ataduras.\n\n"
-      f"[👉 Abrir cuenta en {broker_info['nombre_corto']} (Enlace Oficial)]"
+  st.markdown(
+      f"🚀 **¿Quieres empezar a rentabilizar tu liquidez en {broker_info['nombre_corto']}?**\n\n"
+      "Abre tu cuenta en pocos minutos de forma online desde el enlace oficial:"
+  )
+
+  # Botón oficial de Streamlit que abre el enlace de afiliado
+  st.link_button(
+      label=f"👉 Abrir cuenta en {broker_info['nombre_corto']}",
+      url=broker_info["link"],
   )
 
 with tab2:
