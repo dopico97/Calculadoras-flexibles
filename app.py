@@ -49,27 +49,30 @@ brokers = {
         "tae": 0.035,
         "pago": "Diario",
         "liquidez": "Inmediata",
+        "link": "https://www.trading212.com/invite/TU_CODIGO_DE_AFILIADO",  # <--- Pon aquí tu enlace real
     },
     "Trade Republic 🔵": {
         "nombre_corto": "Trade Republic",
         "tae": 0.030,
         "pago": "Mensual",
         "liquidez": "Inmediata",
+        "link": "https://traderepublic.com/en-es?raf=TU_CODIGO_DE_AFILIADO",  # <--- Pon aquí tu enlace real
     },
     "XTB 🟡": {
         "nombre_corto": "XTB",
         "tae": 0.025,
         "pago": "Mensual",
         "liquidez": "Inmediata",
+        "link": "https://www.xtb.com/es/alta?from=TU_CODIGO_DE_AFILIADO",  # <--- Pon aquí tu enlace real
     },
     "Revolut (Flex) 🟣": {
         "nombre_corto": "Revolut",
         "tae": 0.028,
         "pago": "Diario",
         "liquidez": "Inmediata",
+        "link": "https://revolut.com/referral/?referral-code=TU_CODIGO",  # <--- Pon aquí tu enlace real
     },
 }
-
 # Panel lateral de entradas
 st.sidebar.header("⚙️ Parámetros de Inversión")
 capital_inicial = st.sidebar.number_input(
