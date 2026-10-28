@@ -234,7 +234,7 @@ st.markdown(
 import streamlit.components.v1 as components
 
 # ==========================================
-# SEGUIMIENTO GOOGLE ANALYTICS (Fix Cross-Origin)
+# SEGUIMIENTO GOOGLE ANALYTICS (Modo Debug)
 # ==========================================
 ga_snippet = """
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-40QXT5RVGK"></script>
@@ -243,7 +243,7 @@ ga_snippet = """
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
   gtag('config', 'G-40QXT5RVGK', {
-      'page_referrer': document.referrer
+      'debug_mode': true
   });
 </script>
 """
