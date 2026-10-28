@@ -3,7 +3,7 @@ import pandas as pd
 import plotly.express as px
 import streamlit as st
 
-# Configuración SEO y layout ancho
+# Configuración SEO y layout
 st.set_page_config(
     page_title="Calculadora de Cuentas Remuneradas y Neobrókers 2026",
     page_icon="💸",
@@ -12,83 +12,37 @@ st.set_page_config(
     menu_items={
         "Get Help": None,
         "Report a bug": None,
-        "About": (
-            "Herramienta cuantitativa para simular el interés compuesto en"
-            " cuentas flexibles."
-        ),
+        "About": "Herramienta cuantitativa para simular el interés compuesto.",
     },
 )
 
-# CSS con control absoluto de contraste (Compatible con Modo Oscuro y Claro)
+# CSS Limpio para aspecto SaaS (Modo Claro Forzado)
 st.markdown(
     """
     <style>
-    /* Fondo global */
     .stApp {
-        background-color: #f4f6f9 !important;
-        background-image: radial-gradient(circle at top right, #e2e8f0, #f4f6f9) !important;
-        color: #1e1e1e !important;
+        background-color: #f4f6f9;
+        background-image: radial-gradient(circle at top right, #e2e8f0, #f4f6f9);
     }
-    
-    /* Cabecera transparente */
     header[data-testid="stHeader"] {
         background-color: transparent !important;
     }
-    
-    /* Panel lateral */
     [data-testid="stSidebar"] {
-        background-color: #ffffff !important;
-        border-right: 1px solid #e9ecef !important;
+        background-color: #ffffff;
+        border-right: 1px solid #e9ecef;
     }
-    [data-testid="stSidebar"] * {
-        color: #1e1e1e !important;
-    }
-
-    /* Tarjeta principal flotante */
     .block-container {
-        background-color: #ffffff !important;
-        border-radius: 15px !important;
+        background-color: #ffffff;
+        border-radius: 15px;
         padding: 3rem !important;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05) !important;
-        max-width: 1100px !important;
-        margin-top: 4rem !important;
-        margin-bottom: 3rem !important;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        max-width: 1100px;
+        margin-top: 4rem;
+        margin-bottom: 3rem;
     }
-
-    /* Blindaje de texto dentro de la tarjeta */
-    .block-container p, .block-container h1, .block-container h2, .block-container h3, 
-    .block-container span, .block-container label, .block-container div {
-        color: #1e1e1e !important;
-    }
-
-    /* Ajuste para métricas de Streamlit */
-    [data-testid="stMetricValue"] {
-        color: #111827 !important;
-    }
-    [data-testid="stMetricLabel"] {
-        color: #6c757d !important;
-    }
-
-    /* Ajuste para inputs, numéricos y selectbox */
-    div[data-baseweb="select"] > div, div[data-baseweb="input"] > div {
-        background-color: #f8f9fa !important;
-        color: #1e1e1e !important;
-        border-color: #e5e7eb !important;
-    }
-    div[data-baseweb="select"] span, div[data-baseweb="input"] input {
-        color: #1e1e1e !important;
-    }
-    
-    /* Estilo para las pestañas */
-    button[data-baseweb="tab"] {
-        color: #4b5563 !important;
-    }
-    button[aria-selected="true"] {
-        color: #10b981 !important;
-    }
-
+    h1, h2, h3 { font-family: 'Inter', sans-serif; }
     hr { margin-top: 1.5rem; margin-bottom: 1.5rem; border: 0; border-top: 1px solid #eaeaea; }
-    .disclaimer, .disclaimer * { font-size: 0.8rem !important; color: #6b7280 !important; text-align: justify; margin-top: 40px; }
+    .disclaimer { font-size: 0.8rem; color: #6b7280; text-align: justify; margin-top: 40px; }
     </style>
 """,
     unsafe_allow_html=True,
@@ -98,12 +52,11 @@ st.markdown(
 st.title("💸 Simulador de Rendimiento: Cuentas Flexibles")
 st.markdown(
     "**Calcula el beneficio neto real** de tu liquidez. Compara el impacto del"
-    " interés compuesto diario frente al mensual, con el 19% de IRPF ya"
-    " descontado."
+    " interés compuesto diario frente al mensual, con el 19% de IRPF ya descontado."
 )
 st.markdown("---")
 
-# Base de datos de brókers con enlaces
+# Base de datos de brókers
 brokers = {
     "Trading 212 🟢": {
         "nombre_corto": "Trading 212",
@@ -224,8 +177,7 @@ with tab1:
 
   st.info(
       f"⚡ **¿Todo listo para empezar?**\n\nAbre tu cuenta en"
-      f" {b_info['nombre_corto']} en 5 minutos y empieza a generar intereses"
-      " diarios/mensuales por tu liquidez."
+      f" {b_info['nombre_corto']} en 5 minutos y empieza a generar intereses."
   )
   st.link_button(
       f"👉 Abrir cuenta oficial en {b_info['nombre_corto']}",
@@ -240,7 +192,6 @@ with tab2:
   )
   st.markdown("---")
 
-  # Muestra cada bróker ordenado con su botón de enlace directo
   for k, v in sorted(
       brokers.items(), key=lambda x: x[1]["tae"], reverse=True
   ):
@@ -262,29 +213,19 @@ with tab2:
       st.link_button(f"Abrir en {v['nombre_corto']}", url=v["link"])
     st.markdown("---")
 
-# Sección FAQ y Disclaimer
 st.markdown("### Preguntas Frecuentes")
 with st.expander("¿Cómo se calcula el beneficio neto?"):
   st.write(
-      "El simulador aplica la fórmula del interés compuesto sobre tu capital"
-      " inicial y aportaciones. Al beneficio bruto generado se le aplica"
-      " automáticamente la retención fiscal estándar del 19% correspondiente a"
-      " las rentas del capital mobiliario en España."
+      "Al beneficio bruto generado se le aplica la retención fiscal del 19%."
   )
 with st.expander("¿Cuál es la diferencia entre pago diario y mensual?"):
   st.write(
-      "Plataformas como Trading 212 o Revolut abonan los intereses cada día,"
-      " maximizando el interés compuesto acumulado. Otras como Trade Republic"
-      " lo abonado el primer día laborable del mes siguiente."
+      "Plataformas con pago diario abonan intereses cada día, maximizando el"
+      " interés compuesto."
   )
 
 st.markdown(
-    '<div class="disclaimer"><strong>Aviso legal:</strong> Esta herramienta es'
-    " un simulador matemático basado en las TAEs públicas ofertadas por las"
-    " entidades en el momento actual. No constituye asesoramiento financiero."
-    " Las rentabilidades pasadas o promocionales no garantizan rendimientos"
-    " futuros. La fiscalidad puede variar según la situación personal del"
-    " usuario y su residencia fiscal (cálculos basados en la tributación"
-    " estándar española del 19%).</div>",
+    '<div class="disclaimer"><strong>Aviso legal:</strong> Simulador matemático'
+    " sin validez como asesoramiento financiero.</div>",
     unsafe_allow_html=True,
 )
