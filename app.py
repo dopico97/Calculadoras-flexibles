@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import plotly.express as px
 import streamlit as st
+import streamlit.components.v1 as components
 
 # Configuración SEO y layout
 st.set_page_config(
@@ -229,3 +230,14 @@ st.markdown(
     " sin validez como asesoramiento financiero.</div>",
     unsafe_allow_html=True,
 )
+# Seguimiento de tráfico con Google Analytics
+ga_snippet = """
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-40QXT5RVGK"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-TU_CODIGO_AQUI');
+</script>
+"""
+components.html(ga_snippet, height=0, width=0)
