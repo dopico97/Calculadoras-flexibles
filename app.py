@@ -230,14 +230,21 @@ st.markdown(
     " sin validez como asesoramiento financiero.</div>",
     unsafe_allow_html=True,
 )
-# Seguimiento de tráfico con Google Analytics
-ga_snippet = """
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-40QXT5RVGK"></script>
+
+# ==========================================
+# CONFIGURACIÓN GOOGLE ANALYTICS
+# ==========================================
+GA_ID = "G-XXXXXXXXXX"  # <--- Sustituye ÚNICAMENTE esto por tu ID real de GA4
+
+ga_snippet = f"""
+<script async src="https://www.googletagmanager.com/gtag/js?id={G-40QXT5RVGK}"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
+  function gtag(){{dataLayer.push(arguments);}}
   gtag('js', new Date());
-  gtag('config', 'G-40QXT5RVGK');
+  gtag('config', '{G-40QXT5RVGK}');
 </script>
 """
+
+# Inyección del componente en Streamlit
 components.html(ga_snippet, height=0, width=0)
