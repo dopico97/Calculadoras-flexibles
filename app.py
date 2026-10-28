@@ -3,11 +3,11 @@ import pandas as pd
 import streamlit as st
 import plotly.express as px
 
-# Configuración SEO y de página
+# Configuración SEO y cambio a layout="wide" para aprovechar la pantalla
 st.set_page_config(
     page_title="Calculadora de Cuentas Remuneradas y Neobrókers 2026",
     page_icon="💸",
-    layout="centered",
+    layout="wide",  # <--- Cambiado de "centered" a "wide"
     initial_sidebar_state="expanded",
     menu_items={
         'Get Help': None,
@@ -16,10 +16,33 @@ st.set_page_config(
     }
 )
 
-# CSS Avanzado para aspecto SaaS
+# CSS Avanzado para aspecto de Tarjeta Flotante (SaaS)
 st.markdown("""
     <style>
-    .main { background-color: #fcfcfc; }
+    /* Fondo general de la aplicación con un gradiente muy sutil */
+    .stApp {
+        background-color: #f4f6f9;
+        background-image: radial-gradient(circle at top right, #e2e8f0, #f4f6f9);
+    }
+    
+    /* Darle fondo blanco al panel lateral para que se integre mejor */
+    [data-testid="stSidebar"] {
+        background-color: #ffffff;
+        border-right: 1px solid #e9ecef;
+    }
+
+    /* Contenedor principal estilo "tarjeta" blanca flotante */
+    .block-container {
+        background-color: #ffffff;
+        border-radius: 15px;
+        padding: 3rem !important;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        max-width: 1100px; /* Ancho máximo para que no sea infinito en monitores grandes */
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    /* Estilos de tipografía y métricas */
     h1, h2, h3 { color: #1e1e1e; font-family: 'Inter', sans-serif; }
     .stMetric label { color: #6c757d !important; font-weight: 600; font-size: 0.9rem; }
     .stMetric value { color: #111827 !important; font-weight: 800; }
@@ -32,6 +55,8 @@ st.markdown("""
 st.title("💸 Simulador de Rendimiento: Cuentas Flexibles")
 st.markdown("**Calcula el beneficio neto real** de tu liquidez. Compara el impacto del interés compuesto diario frente al mensual, con el 19% de IRPF ya descontado.")
 st.markdown("---")
+
+# (A partir de aquí, deja tu código tal cual, empezando por el diccionario de brokers)
 
 # Base de datos de brókers
 brokers = {
