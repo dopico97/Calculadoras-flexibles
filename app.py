@@ -237,7 +237,7 @@ ga_snippet = """
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-  gtag('config', 'G-TU_CODIGO_AQUI');
+  gtag('config', 'G-40QXT5RVGK');
 </script>
 """
 components.html(ga_snippet, height=0, width=0)
