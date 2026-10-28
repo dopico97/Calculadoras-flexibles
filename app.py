@@ -231,20 +231,19 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# ==========================================
-# CONFIGURACIÓN GOOGLE ANALYTICS
-# ==========================================
-GA_ID = "G-XXXXXXXXXX"  # <--- Sustituye ÚNICAMENTE esto por tu ID real de GA4
+import streamlit.components.v1 as components
 
-ga_snippet = f"""
-<script async src="https://www.googletagmanager.com/gtag/js?id={G-40QXT5RVGK}"></script>
+# ==========================================
+# SEGUIMIENTO GOOGLE ANALYTICS
+# ==========================================
+ga_snippet = """
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-40QXT5RVGK"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
-  function gtag(){{dataLayer.push(arguments);}}
+  function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-  gtag('config', '{G-40QXT5RVGK}');
+  gtag('config', 'G-40QXT5RVGK');
 </script>
 """
 
-# Inyección del componente en Streamlit
 components.html(ga_snippet, height=0, width=0)
