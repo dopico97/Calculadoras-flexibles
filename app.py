@@ -234,7 +234,7 @@ st.markdown(
 import streamlit.components.v1 as components
 
 # ==========================================
-# SEGUIMIENTO GOOGLE ANALYTICS (Optimizado para iframe)
+# SEGUIMIENTO GOOGLE ANALYTICS (Fix Cross-Origin)
 # ==========================================
 ga_snippet = """
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-40QXT5RVGK"></script>
@@ -243,8 +243,7 @@ ga_snippet = """
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
   gtag('config', 'G-40QXT5RVGK', {
-      'page_location': window.parent.location.href,
-      'cookie_flags': 'SameSite=None;Secure'
+      'page_referrer': document.referrer
   });
 </script>
 """
