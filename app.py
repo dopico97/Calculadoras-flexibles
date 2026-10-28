@@ -1,196 +1,153 @@
 import numpy as np
 import pandas as pd
 import streamlit as st
+import plotly.express as px
 
+# Configuración SEO y de página
 st.set_page_config(
     page_title="Calculadora de Cuentas Remuneradas y Neobrókers 2026",
-    page_icon="💸", # Puedes poner un emoji o la ruta a un archivo .png (favicon)
+    page_icon="💸",
     layout="centered",
     initial_sidebar_state="expanded",
     menu_items={
         'Get Help': None,
         'Report a bug': None,
-        'About': "Herramienta cuantitativa para simular el interés compuesto y beneficio neto en cuentas flexibles."
+        'About': "Herramienta cuantitativa para simular el interés compuesto en cuentas flexibles."
     }
 )
 
-# Estilos CSS personalizados para mejorar el diseño visual
-st.markdown(
-    """
+# CSS Avanzado para aspecto SaaS
+st.markdown("""
     <style>
-    .main {
-        background-color: #f8f9fa;
-    }
-    .stMetric {
-        background-color: #ffffff;
-        padding: 15px;
-        border-radius: 10px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        border: 1px solid #e9ecef;
-    }
-    .broker-card {
-        background-color: #ffffff;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        border: 1px solid #e9ecef;
-        margin-bottom: 20px;
-    }
+    .main { background-color: #fcfcfc; }
+    h1, h2, h3 { color: #1e1e1e; font-family: 'Inter', sans-serif; }
+    .stMetric label { color: #6c757d !important; font-weight: 600; font-size: 0.9rem; }
+    .stMetric value { color: #111827 !important; font-weight: 800; }
+    hr { margin-top: 1.5rem; margin-bottom: 1.5rem; border: 0; border-top: 1px solid #eaeaea; }
+    .disclaimer { font-size: 0.8rem; color: #888; text-align: justify; margin-top: 50px; }
     </style>
-""",
-    unsafe_allow_html=True,
-)
+""", unsafe_allow_html=True)
 
-# Título principal y subtítulo
-st.title("💸 Simulador de Cuentas Flexibles y Neobrókers")
-st.markdown(
-    "Calcula el beneficio neto real (descontando el 19% de IRPF) y compara la rentabilidad diaria o mensual de tu capital."
-)
+# Cabecera (Hero Section)
+st.title("💸 Simulador de Rendimiento: Cuentas Flexibles")
+st.markdown("**Calcula el beneficio neto real** de tu liquidez. Compara el impacto del interés compuesto diario frente al mensual, con el 19% de IRPF ya descontado.")
+st.markdown("---")
 
-# Diccionario de brókers actualizado
+# Base de datos de brókers
 brokers = {
-    "Trading 212 🟢": {
-        "nombre_corto": "Trading 212",
-        "tae": 0.035,
-        "pago": "Diario",
-        "liquidez": "Inmediata",
-        "link": "https://www.trading212.com/invite/TU_CODIGO_DE_AFILIADO",  # <--- Pon aquí tu enlace real
-    },
-    "Trade Republic 🔵": {
-        "nombre_corto": "Trade Republic",
-        "tae": 0.030,
-        "pago": "Mensual",
-        "liquidez": "Inmediata",
-        "link": "https://traderepublic.com/en-es?raf=TU_CODIGO_DE_AFILIADO",  # <--- Pon aquí tu enlace real
-    },
-    "XTB 🟡": {
-        "nombre_corto": "XTB",
-        "tae": 0.025,
-        "pago": "Mensual",
-        "liquidez": "Inmediata",
-        "link": "https://www.xtb.com/es/alta?from=TU_CODIGO_DE_AFILIADO",  # <--- Pon aquí tu enlace real
-    },
-    "Revolut (Flex) 🟣": {
-        "nombre_corto": "Revolut",
-        "tae": 0.028,
-        "pago": "Diario",
-        "liquidez": "Inmediata",
-        "link": "https://revolut.com/referral/?referral-code=TU_CODIGO",  # <--- Pon aquí tu enlace real
-    },
+    "Trading 212 🟢": {"nombre_corto": "Trading 212", "tae": 0.035, "pago": "Diario", "liquidez": "Inmediata", "link": "TU_ENLACE"},
+    "Trade Republic 🔵": {"nombre_corto": "Trade Republic", "tae": 0.030, "pago": "Mensual", "liquidez": "Inmediata", "link": "TU_ENLACE"},
+    "XTB 🟡": {"nombre_corto": "XTB", "tae": 0.025, "pago": "Mensual", "liquidez": "Inmediata", "link": "TU_ENLACE"},
+    "Revolut (Flex) 🟣": {"nombre_corto": "Revolut", "tae": 0.028, "pago": "Diario", "liquidez": "Inmediata", "link": "TU_ENLACE"},
 }
-# Panel lateral de entradas
-st.sidebar.header("⚙️ Parámetros de Inversión")
-capital_inicial = st.sidebar.number_input(
-    "Capital inicial (€)", min_value=0.0, value=5000.0, step=500.0
-)
-aportacion_mensual = st.sidebar.number_input(
-    "Aportación mensual (€)", min_value=0.0, value=200.0, step=50.0
-)
-anos = st.sidebar.slider("Horizonte temporal (años)", 1, 10, 3)
 
-irpf = 0.19  # Retención IRPF
+# Sidebar - Panel de control
+with st.sidebar:
+    st.header("⚙️ Configuración")
+    capital_inicial = st.number_input("Capital inicial (€)", min_value=0.0, value=10000.0, step=1000.0)
+    aportacion_mensual = st.number_input("Aportación mensual (€)", min_value=0.0, value=300.0, step=50.0)
+    anos = st.slider("Horizonte temporal (años)", 1, 20, 5)
+    
+    st.markdown("---")
+    st.markdown("💡 *Los intereses se capitalizan automáticamente según la frecuencia de pago de cada entidad.*")
 
-# Creación de Pestañas (Tabs) para separar vistas
-tab1, tab2 = st.tabs(["📊 Simulador Detallado", "⚖️ Comparativa de Brókers"])
+irpf = 0.19
+
+tab1, tab2 = st.tabs(["📈 Análisis Detallado", "⚖️ Comparador Global"])
 
 with tab1:
-  selected_broker_key = st.selectbox(
-      "Selecciona la plataforma a simular", list(brokers.keys())
-  )
-  broker_info = brokers[selected_broker_key]
-  tae = broker_info["tae"]
+    selected_broker_key = st.selectbox("Selecciona la plataforma a analizar", list(brokers.keys()))
+    b_info = brokers[selected_broker_key]
+    tae = b_info["tae"]
 
-  # Bloque de métricas de condiciones del bróker
-  st.markdown("### Condiciones de la Plataforma")
-  col_info1, col_info2, col_info3 = st.columns(3)
-  col_info1.metric("Rentabilidad (TAE)", f"{tae*100:.2f}%")
-  col_info2.metric("Frecuencia de Pago", broker_info["pago"])
-  col_info3.metric("Disponibilidad", broker_info["liquidez"])
+    # Dashboard de métricas principales
+    col_info1, col_info2, col_info3 = st.columns(3)
+    col_info1.metric("Rentabilidad (TAE)", f"{tae*100:.2f}%")
+    col_info2.metric("Frecuencia", b_info["pago"])
+    col_info3.metric("Liquidez", b_info["liquidez"])
 
-  # Cálculos iniciales
-  interes_diario_inicial = (capital_inicial * tae) / 365 * (1 - irpf)
-  interes_mensual_inicial = (capital_inicial * tae) / 12 * (1 - irpf)
-  interes_anual_inicial = capital_inicial * tae * (1 - irpf)
+    # Simulación Matemática
+    meses = anos * 12
+    saldo_actual = capital_inicial
+    total_aportado = capital_inicial
+    beneficio_neto = 0
+    historial = [{"Mes": 0, "Año": 0, "Capital Aportado": total_aportado, "Saldo Total": saldo_actual, "Beneficio Neto": 0}]
 
-  st.markdown(
-      f"### 📈 Resultados Estimados para: {broker_info['nombre_corto']}"
-  )
+    for m in range(1, meses + 1):
+        saldo_actual += aportacion_mensual
+        total_aportado += aportacion_mensual
+        
+        interes_mes = saldo_actual * (tae / 12) * (1 - irpf)
+        beneficio_neto += interes_mes
+        saldo_actual += interes_mes
 
-  col1, col2, col3 = st.columns(3)
-  col1.metric("Beneficio Diario (Neto)", f"{interes_diario_inicial:.2f} €")
-  col2.metric("Beneficio Mensual (Neto)", f"{interes_mensual_inicial:.2f} €")
-  col3.metric("Beneficio Anual (Neto)", f"{interes_anual_inicial:.2f} €")
+        if m % 12 == 0 or m == meses:
+            historial.append({
+                "Mes": m,
+                "Año": round(m / 12, 1),
+                "Capital Aportado": round(total_aportado, 2),
+                "Saldo Total": round(saldo_actual, 2),
+                "Beneficio Neto": round(beneficio_neto, 2)
+            })
 
-  # Simulación temporal
-  meses = anos * 12
-  saldo_actual = capital_inicial
-  total_aportado = capital_inicial
-  beneficio_total_neto = 0
-  historial = []
+    df = pd.DataFrame(historial)
 
-  for m in range(1, meses + 1):
-    if m > 1:
-      saldo_actual += aportacion_mensual
-      total_aportado += aportacion_mensual
+    st.markdown("---")
+    st.subheader("Proyección del Patrimonio")
+    
+    # Gráfico interactivo profesional con Plotly
+    fig = px.area(
+        df, 
+        x="Año", 
+        y=["Capital Aportado", "Saldo Total"],
+        color_discrete_sequence=["#9ca3af", "#10b981"],
+        labels={"value": "Euros (€)", "variable": "Métrica"}
+    )
+    fig.update_layout(
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+        margin=dict(l=0, r=0, t=30, b=0),
+        plot_bgcolor="rgba(0,0,0,0)",
+        paper_bgcolor="rgba(0,0,0,0)",
+        hovermode="x unified"
+    )
+    fig.update_yaxes(showgrid=True, gridcolor="#f0f0f0")
+    fig.update_xaxes(showgrid=False)
+    st.plotly_chart(fig, use_container_width=True)
 
-    interes_mes = saldo_actual * (tae / 12) * (1 - irpf)
-    beneficio_total_neto += interes_mes
-    saldo_actual += interes_mes
-
-    if m % 12 == 0 or m == meses:
-      historial.append(
-          {
-              "Año": int(m / 12),
-              "Capital Aportado (€)": round(total_aportado, 2),
-              "Beneficio Neto Acumulado (€)": round(beneficio_total_neto, 2),
-              "Saldo Total (€)": round(saldo_actual, 2),
-          }
-      )
-
-  df_resumen = pd.DataFrame(historial)
-
-  st.markdown("### Evolución del Capital")
-  st.line_chart(
-      df_resumen.set_index("Año")[["Saldo Total (€)", "Capital Aportado (€)"]]
-  )
-
-  st.markdown("### Desglose Anual")
-  st.dataframe(df_resumen, use_container_width=True)
-
-# Bloque de Afiliación con botón interactivo real
-  st.markdown("---")
-  st.markdown(
-      f"🚀 **¿Quieres empezar a rentabilizar tu liquidez en {broker_info['nombre_corto']}?**\n\n"
-      "Abre tu cuenta en pocos minutos de forma online desde el enlace oficial:"
-  )
-
-  # Botón oficial de Streamlit que abre el enlace de afiliado
-  st.link_button(
-      label=f"👉 Abrir cuenta en {broker_info['nombre_corto']}",
-      url=broker_info["link"],
-  )
+    # CTA de Afiliación (Call To Action)
+    st.info(f"⚡ **¿Todo listo para empezar?**\n\nAbre tu cuenta en {b_info['nombre_corto']} en 5 minutos y empieza a generar intereses diarios/mensuales por tu liquidez.")
+    st.link_button(f"👉 Abrir cuenta oficial en {b_info['nombre_corto']}", url=b_info["link"])
 
 with tab2:
-  st.markdown("### Comparativa General de Cuentas Flexibles")
-  st.markdown(
-      "Visualiza de un vistazo la rentabilidad neta estimada al año para tu capital inicial con cada plataforma."
-  )
+    st.markdown("### Ranking de Rentabilidad Estimada")
+    st.markdown(f"Basado en un capital de **{capital_inicial:,.2f} €** y aportaciones de **{aportacion_mensual:,.2f} €/mes** durante **{anos} años**.")
+    
+    comp_data = []
+    for k, v in brokers.items():
+        s_act = capital_inicial
+        for m in range(1, meses + 1):
+            s_act += aportacion_mensual
+            int_m = s_act * (v["tae"] / 12) * (1 - irpf)
+            s_act += int_m
+        
+        comp_data.append({
+            "Plataforma": v["nombre_corto"],
+            "TAE": f"{v['tae']*100:.2f}%",
+            "Pago": v["pago"],
+            "Capital Final (€)": round(s_act, 2),
+            "Beneficio Neto Total (€)": round(s_act - (capital_inicial + aportacion_mensual*meses), 2)
+        })
+    
+    df_comp = pd.DataFrame(comp_data).sort_values(by="Beneficio Neto Total (€)", ascending=False)
+    st.dataframe(df_comp, use_container_width=True, hide_index=True)
 
-  comparativa_data = []
-  for b_key, b_val in brokers.items():
-    beneficio_neto_anual = capital_inicial * b_val["tae"] * (1 - irpf)
-    comparativa_data.append(
-        {
-            "Plataforma": b_key,
-            "TAE": f"{b_val['tae']*100:.2f}%",
-            "Pago de Intereses": b_val["pago"],
-            "Beneficio Neto Anual (1er Año)": round(beneficio_neto_anual, 2),
-        }
-    )
+# Sección SEO y Confianza (Expanders)
+st.markdown("---")
+st.subheader("Preguntas Frecuentes")
+with st.expander("¿Cómo se calcula el beneficio neto?"):
+    st.write("El simulador aplica la fórmula del interés compuesto sobre tu capital inicial y aportaciones mensuales. Al beneficio bruto generado se le aplica automáticamente la retención fiscal estándar del 19% correspondiente a las rentas del capital mobiliario en España.")
+with st.expander("¿Cuál es la diferencia entre pago diario y mensual?"):
+    st.write("Plataformas como Trading 212 o Revolut abonan los intereses cada día, lo que significa que al día siguiente generas intereses sobre los intereses del día anterior (mayor efecto bola de nieve). Otras como Trade Republic lo hacen el día 1 de cada mes.")
 
-  df_comparativa = pd.DataFrame(comparativa_data)
-  st.dataframe(df_comparativa, use_container_width=True, hide_index=True)
-
-  st.info(
-      "💡 *Nota: Los cálculos del beneficio neto anual se realizan aplicando la retención fiscal estándar del 19% sobre los rendimientos del ahorro en España.*"
-  )
+# Disclaimer Legal
+st.markdown('<div class="disclaimer"><strong>Aviso legal:</strong> Esta herramienta es un simulador matemático basado en las TAEs públicas ofertadas por las entidades en el momento actual. No constituye asesoramiento financiero. Las rentabilidades pasadas o promocionales no garantizan rendimientos futuros. La fiscalidad puede variar según la situación personal del usuario y su residencia fiscal (cálculos basados en la tributación estándar española del 19%).</div>', unsafe_allow_html=True)
