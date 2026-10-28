@@ -2,11 +2,16 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 
-# Configuración de la página
 st.set_page_config(
-    page_title="Calculadora de Cuentas Flexibles",
+    page_title="Calculadora de Cuentas Remuneradas y Neobrókers 2026",
+    page_icon="💸", # Puedes poner un emoji o la ruta a un archivo .png (favicon)
     layout="centered",
     initial_sidebar_state="expanded",
+    menu_items={
+        'Get Help': None,
+        'Report a bug': None,
+        'About': "Herramienta cuantitativa para simular el interés compuesto y beneficio neto en cuentas flexibles."
+    }
 )
 
 # Estilos CSS personalizados para mejorar el diseño visual
