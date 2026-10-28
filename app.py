@@ -19,30 +19,35 @@ st.set_page_config(
 # CSS Avanzado para aspecto de Tarjeta Flotante (SaaS)
 st.markdown("""
     <style>
-    /* Fondo general de la aplicación con un gradiente muy sutil */
+    /* Fondo general de la aplicación */
     .stApp {
         background-color: #f4f6f9;
         background-image: radial-gradient(circle at top right, #e2e8f0, #f4f6f9);
     }
     
-    /* Darle fondo blanco al panel lateral para que se integre mejor */
+    /* Hacer transparente la cabecera por defecto de Streamlit (el bloque blanco superior) */
+    header[data-testid="stHeader"] {
+        background-color: transparent !important;
+    }
+    
+    /* Panel lateral */
     [data-testid="stSidebar"] {
         background-color: #ffffff;
         border-right: 1px solid #e9ecef;
     }
 
-    /* Contenedor principal estilo "tarjeta" blanca flotante */
+    /* Contenedor principal estilo "tarjeta" */
     .block-container {
         background-color: #ffffff;
         border-radius: 15px;
         padding: 3rem !important;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-        max-width: 1100px; /* Ancho máximo para que no sea infinito en monitores grandes */
-        margin-top: 2rem;
-        margin-bottom: 2rem;
+        max-width: 1100px;
+        margin-top: 4rem; /* Margen superior ampliado */
+        margin-bottom: 3rem;
     }
 
-    /* Estilos de tipografía y métricas */
+    /* Tipografías y métricas */
     h1, h2, h3 { color: #1e1e1e; font-family: 'Inter', sans-serif; }
     .stMetric label { color: #6c757d !important; font-weight: 600; font-size: 0.9rem; }
     .stMetric value { color: #111827 !important; font-weight: 800; }
@@ -120,13 +125,13 @@ with tab1:
     st.markdown("---")
     st.subheader("Proyección del Patrimonio")
     
-    # Gráfico interactivo profesional con Plotly
+# Gráfico interactivo profesional con Plotly
     fig = px.area(
         df, 
         x="Año", 
-        y=["Capital Aportado", "Saldo Total"],
-        color_discrete_sequence=["#9ca3af", "#10b981"],
-        labels={"value": "Euros (€)", "variable": "Métrica"}
+        y=["Capital Aportado", "Beneficio Neto"], # <- Corrección matemática
+        color_discrete_sequence=["#d1d5db", "#10b981"], # Gris claro para capital, verde para intereses
+        labels={"value": "Euros (€)", "variable": "Desglose"}
     )
     fig.update_layout(
         legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
