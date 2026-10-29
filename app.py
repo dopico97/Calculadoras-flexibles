@@ -233,6 +233,7 @@ st.markdown(
 
 import streamlit.components.v1 as components
 
+
 # ==========================================
 # SEGUIMIENTO GOOGLE ANALYTICS (Modo Debug)
 # ==========================================
@@ -249,3 +250,40 @@ ga_snippet = """
 """
 
 components.html(ga_snippet, height=0, width=0)
+import uuid
+import requests
+import streamlit as st
+
+# ==========================================
+# RASTREO SERVER-SIDE GA4 (A prueba de móviles)
+# ==========================================
+GA_MEASUREMENT_ID = "G-40QXT5RVGK"
+GA_API_SECRET = "jQsXK2F2RSuzrToEay-sxQ"  # <--- Sustituye por el secreto de API generado
+
+
+def registrar_visita_servidor():
+  if "user_client_id" not in st.session_state:
+    st.session_state["user_client_id"] = str(uuid.uuid4())
+
+    url = (
+        "https://www.google-analytics.com/mp/collect"
+        f"?measurement_id={GA_MEASUREMENT_ID}&api_secret={GA_API_SECRET}"
+    )
+    payload = {
+        "client_id": st.session_state["user_client_id"],
+        "events": [{
+            "name": "page_view",
+            "params": {
+                "page_title": "Calculadora Cuentas Flexibles",
+                "engagement_time_msec": "100",
+            },
+        }],
+    }
+    try:
+      requests.post(url, json=payload, timeout=2)
+    except Exception:
+      pass
+
+
+# Llama a la función al inicio de app.py
+registrar_visita_servidor()
