@@ -6,14 +6,14 @@ import streamlit.components.v1 as components
 
 # Configuración SEO y layout
 st.set_page_config(
-    page_title="Calculadora de Cuentas Remuneradas y Neobrókers 2026",
+    page_title="Simulador Interés Compuesto 2026 | Trade Republic vs Trading 212 | Cálculo Neto IRPF",
     page_icon="💸",
     layout="wide",
     initial_sidebar_state="expanded",
     menu_items={
         "Get Help": None,
         "Report a bug": None,
-        "About": "Herramienta cuantitativa para simular el interés compuesto.",
+        "About": "Simulador para calcular el beneficio neto real en cuentas remuneradas en España con IRPF descontado.",
     },
 )
 
@@ -214,20 +214,34 @@ with tab2:
       st.link_button(f"Abrir en {v['nombre_corto']}", url=v["link"])
     st.markdown("---")
 
-st.markdown("### Preguntas Frecuentes")
-with st.expander("¿Cómo se calcula el beneficio neto?"):
+st.markdown("### Preguntas Frecuentes sobre Rentabilidad y Fiscalidad")
+
+with st.expander("¿Cuánto paga Trade Republic o Trading 212 descontando impuestos en España?"):
   st.write(
-      "Al beneficio bruto generado se le aplica la retención fiscal del 19%."
+      "Al utilizar este simulador de beneficio neto para cuentas remuneradas, la herramienta descuenta automáticamente "
+      "la retención estándar del 19% de IRPF aplicada en España sobre los rendimientos del capital mobiliario. "
+      "Esto te permite visualizar tu ganancia real neta sin sorpresas frente a Hacienda, comparando directamente "
+      "las opciones de Trade Republic vs Trading 212."
   )
-with st.expander("¿Cuál es la diferencia entre pago diario y mensual?"):
+
+with st.expander("Calculadora de interés compuesto: ¿Mejor pago diario (Revolut Flex) o mensual?"):
   st.write(
-      "Plataformas con pago diario abonan intereses cada día, maximizando el"
-      " interés compuesto."
+      "La principal diferencia matemática radica en la frecuencia de capitalización. Plataformas como Revolut (Cuentas Flexibles) "
+      "y Trading 212 ofrecen abono diario de intereses, lo que acelera el efecto del interés compuesto a largo plazo "
+      "frente al pago mensual tradicional. Esta calculadora te permite proyectar visualmente esa diferencia de rentabilidad "
+      "sobre tu patrimonio a lo largo de los años."
+  )
+
+with st.expander("¿Cómo calcular el beneficio neto real de mis ahorros frente a la inflación?"):
+  st.write(
+      "El cálculo exacto depende de tu capital inicial, aportaciones periódicas y el horizonte temporal. Seleccionando "
+      "el neobróker en nuestro comparador global, obtendrás el desglose financiero preciso entre el capital que has depositado "
+      "y los intereses netos generados, creando una proyección patrimonial a medida para proteger tu liquidez."
   )
 
 st.markdown(
-    '<div class="disclaimer"><strong>Aviso legal:</strong> Simulador matemático'
-    " sin validez como asesoramiento financiero.</div>",
+    '<div class="disclaimer"><strong>Aviso legal:</strong> Simulador matemático '
+    "sin validez como asesoramiento financiero ni tributario. Cálculos basados en retención IRPF España (19%).</div>",
     unsafe_allow_html=True,
 )
 
