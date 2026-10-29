@@ -245,6 +245,16 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+st.markdown(
+    """
+    <head>
+        <meta name="google-site-verification" content=<meta name="google-site-verification" content="xg0jtIBmBD7L_TlG_jc4jGWCUpwSKM5v-rYpw6L45tc" />">
+        <meta name="description" content="Simulador online gratuito para calcular el beneficio neto real en cuentas remuneradas y neobrókers en España aplicando el 19% de retención de IRPF.">
+    </head>
+    """,
+    unsafe_allow_html=True,
+)
+
 import streamlit.components.v1 as components
 
 
