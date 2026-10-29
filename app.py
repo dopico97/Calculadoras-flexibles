@@ -4,6 +4,17 @@ import plotly.express as px
 import streamlit as st
 import streamlit.components.v1 as components
 
+# Cabecera SEO y verificación de Search Console
+st.markdown(
+    """
+    <head>
+        <meta name="google-site-verification" content="TU_CÓDIGO_AQUÍ">
+        <meta name="description" content="Simulador online gratuito para calcular el beneficio neto real en cuentas remuneradas y neobrókers en España aplicando el 19% de retención de IRPF.">
+    </head>
+    """,
+    unsafe_allow_html=True,
+)
+
 # Configuración SEO y layout
 st.set_page_config(
     page_title="Simulador Interés Compuesto 2026 | Trade Republic vs Trading 212 | Cálculo Neto IRPF",
