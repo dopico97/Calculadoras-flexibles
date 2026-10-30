@@ -1,0 +1,14 @@
+name: Keep Streamlit App Awake
+
+on:
+  schedule:
+    # Se ejecuta automáticamente todos los días a las 08:00 UTC
+    - cron: '0 8 * * *'
+  workflow_dispatch: # Te permite ejecutar el script manualmente si lo necesitas
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Hacer ping a la calculadora
+        run: curl -s https://calculadoras-flexibles-sdm2bxmwojswfm3khacjaf.streamlit.app/ > /dev/null
